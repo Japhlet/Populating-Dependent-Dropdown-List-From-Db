@@ -1,16 +1,48 @@
-﻿@model PopulatingDependentDropdownListFromDb.Repositories.CountyRepo
+﻿@model PopulatingDependentDropdownListFromDb.Repositories.CountySubCountyWardRepo
 @{
     ViewBag.Title = "Home Page";
 }
 
-<script src="~/Scripts/jquery-1.7.1.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <table>
     <tr>
         <td>
             <label>County</label>
         </td>
         <td>
-            @Html.DropDownListFor(x => x.countyNames, Model.countyNames, "--Select--", new { @id = "ddlState" });
+            @Html.DropDownListFor(x => x.countyNames, Model.countyNames, "--Select--", new { @id = "ddlCounty" })
         </td>
     </tr>
-</table> 
+    <tr>
+        <td>
+            <label>Sub County</label>
+        </td>
+        <td id="SubCounty">
+            @Html.DropDownListFor(x => x.subCountyNames, new List<SelectListItem>(), "--Select--", new { @id = "ddlSubCounty" })
+        </td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#ddlCounty').change(function () {
+            console.log('xxxxxxx');
+            $.ajax({
+                type: 'post',
+                url: '@Url.Action("GetSubCounty")',
+                data: { countyId: $('#ddlCounty').val() },
+                datatype: 'json',
+                traditional: true,
+                success: function (data) {
+                    var subCounty = "<select id='ddlSubCounty'>";
+                    subCounty = subCounty + '<option value="">--Select--</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        subCounty = subCounty + '<option value=' + data[i].Value + '>' + data[i].Text + '</option>';
+                    }
+                    subCounty = subCounty + '</select>';
+                    $('#SubCounty').html(subCounty);
+                }
+            });
+        });
+    });
+</script>  

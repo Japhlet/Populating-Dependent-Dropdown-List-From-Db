@@ -14,7 +14,7 @@ namespace PopulatingDependentDropdownListFromDb.Controllers
         public ActionResult Index()
         {   
             List<SelectListItem> countyNames = new List<SelectListItem>();
-            CountyRepo countyRepo = new CountyRepo();
+            CountySubCountyWardRepo countyRepo = new CountySubCountyWardRepo();
 
             List<county> counties = db.county.ToList();
             counties.ForEach(x =>
@@ -37,6 +37,23 @@ namespace PopulatingDependentDropdownListFromDb.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult GetSubCounty(string countyId)
+        {
+            int cntyId;
+            List<SelectListItem> subCountyNames = new List<SelectListItem>();
+            if (!string.IsNullOrEmpty(countyId))
+            {
+                cntyId = Convert.ToInt32(countyId);
+                List<subCounty> subCounties = db.subCounty.Where(x => x.countyId == cntyId).ToList();
+                subCounties.ForEach(x =>
+                {
+                    subCountyNames.Add(new SelectListItem { Text = x.subCountyName, Value = x.id.ToString() });
+                });
+            }
+            return Json(subCountyNames, JsonRequestBehavior.AllowGet);
         }
     }
 }

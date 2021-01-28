@@ -138,8 +138,7 @@
     <Compile Include="Models\Db.cs" />
     <Compile Include="Models\subCounty.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\CountyRepo.cs" />
-    <Compile Include="Repositories\SubCountyRepo.cs" />
+    <Compile Include="Repositories\CountySubCountyWardRepo.cs" />
     <Compile Include="ViewModels\CountyVM.cs" />
     <Compile Include="ViewModels\SubCountyVM.cs" />
   </ItemGroup>
